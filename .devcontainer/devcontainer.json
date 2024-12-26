@@ -1,0 +1,14 @@
+{
+    "name": "go-aspera",
+    "image": "golang",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "golang.go"
+            ]
+        }
+    },
+    "mounts": [
+        "source=/Users/vishy/go/pkg,target=/go/pkg,type=bind,consistency=cached"
+    ]
+}
