@@ -1,109 +1,123 @@
 package main
 
+import "strings"
+
 type endpoint struct {
-	route  string
-	prefix string
+	Route  string
+	Prefix string
+}
+
+func (e *endpoint) URL() string {
+	return e.Prefix + e.Route
+}
+
+func (e *endpoint) URLWithParams(params map[string]string) string {
+	url := e.Prefix + e.Route
+	for k, v := range params {
+		url = strings.Replace(url, "${"+k+"}", v, -1)
+	}
+	return url
 }
 
 var endpoints = map[string]endpoint{
 	"activity": {
-		route:  "activity",
-		prefix: "/connect/transfers/",
+		Route:  "activity",
+		Prefix: "/connect/transfers/",
 	},
 	"authenticate": {
-		route:  "authenticate",
-		prefix: "/connect/info/",
+		Route:  "authenticate",
+		Prefix: "/connect/info/",
 	},
 	"droppedFiles": {
-		route:  "dropped-files",
-		prefix: "/connect/file/",
+		Route:  "dropped-files",
+		Prefix: "/connect/file/",
 	},
 	"getTransfer": {
-		route:  "info/${id}",
-		prefix: "/connect/transfers/",
+		Route:  "info/${id}",
+		Prefix: "/connect/transfers/",
 	},
 	"initDragDrop": {
-		route:  "initialize-drag-drop",
-		prefix: "/connect/file/",
+		Route:  "initialize-drag-drop",
+		Prefix: "/connect/file/",
 	},
 	"modifyTransfer": {
-		route:  "modify/${id}",
-		prefix: "/connect/transfers/",
+		Route:  "modify/${id}",
+		Prefix: "/connect/transfers/",
 	},
 	"ping": {
-		route:  "ping",
-		prefix: "/connect/info/",
+		Route:  "ping",
+		Prefix: "/connect/info/",
 	},
 	"readAsArrayBuffer": {
-		route:  "read-as-array-buffer/",
-		prefix: "/connect/file/",
+		Route:  "read-as-array-buffer/",
+		Prefix: "/connect/file/",
 	},
 	"readChunkAsArrayBuffer": {
-		route:  "read-chunk-as-array-buffer/",
-		prefix: "/connect/file/",
+		Route:  "read-chunk-as-array-buffer/",
+		Prefix: "/connect/file/",
 	},
 	"getChecksum": {
-		route:  "checksum/",
-		prefix: "/connect/file/",
+		Route:  "checksum/",
+		Prefix: "/connect/file/",
 	},
 	"removeTransfer": {
-		route:  "remove/${id}",
-		prefix: "/connect/transfers/",
+		Route:  "remove/${id}",
+		Prefix: "/connect/transfers/",
 	},
 	"resumeTransfer": {
-		route:  "resume/${id}",
-		prefix: "/connect/transfers/",
+		Route:  "resume/${id}",
+		Prefix: "/connect/transfers/",
 	},
 	"showAbout": {
-		route:  "about",
-		prefix: "/connect/windows/",
+		Route:  "about",
+		Prefix: "/connect/windows/",
 	},
 	"showDirectory": {
-		route:  "finder/${id}",
-		prefix: "/connect/windows/",
+		Route:  "finder/${id}",
+		Prefix: "/connect/windows/",
 	},
 	"showPreferences": {
-		route:  "preferences",
-		prefix: "/connect/windows/",
+		Route:  "preferences",
+		Prefix: "/connect/windows/",
 	},
 	"showPreferencesPage": {
-		route:  "preferences/${id}",
-		prefix: "/connect/windows/",
+		Route:  "preferences/${id}",
+		Prefix: "/connect/windows/",
 	},
 	"showSaveFileDialog": {
-		route:  "select-save-file-dialog/",
-		prefix: "/connect/windows/",
+		Route:  "select-save-file-dialog/",
+		Prefix: "/connect/windows/",
 	},
 	"showSelectFileDialog": {
-		route:  "select-open-file-dialog/",
-		prefix: "/connect/windows/",
+		Route:  "select-open-file-dialog/",
+		Prefix: "/connect/windows/",
 	},
 	"showSelectFolderDialog": {
-		route:  "select-open-folder-dialog/",
-		prefix: "/connect/windows/",
+		Route:  "select-open-folder-dialog/",
+		Prefix: "/connect/windows/",
 	},
 	"showTransferManager": {
-		route:  "transfer-manager",
-		prefix: "/connect/windows/",
+		Route:  "transfer-manager",
+		Prefix: "/connect/windows/",
 	},
 	"showTransferMonitor": {
-		route:  "transfer-monitor/${id}",
-		prefix: "/connect/windows/",
+		Route:  "transfer-monitor/${id}",
+		Prefix: "/connect/windows/",
 	},
 	"startTransfer": {
-		route:  "start",
-		prefix: "/connect/transfers/",
+		Route:  "start",
+		Prefix: "/connect/transfers/",
 	},
 	"stopTransfer": {
-		route:  "stop/${id}",
-		prefix: "/connect/transfers/",
+		Route:  "stop/${id}",
+		Prefix: "/connect/transfers/",
 	},
 	"testSshPorts": {
-		route:  "ports",
-		prefix: "/connect/info/",
+		Route:  "ports",
+		Prefix: "/connect/info/",
 	},
 	"version": {
-		route:  "version",
-		prefix: "/connect/info/",
+		Route:  "version",
+		Prefix: "/connect/info/",
 	},
 }
