@@ -1,4 +1,4 @@
-package main
+package aspera
 
 import (
 	"context"
@@ -47,7 +47,7 @@ func (c *Client) Do(ctx context.Context, req *http.Request, target interface{}) 
 		return fmt.Errorf("response failed: %s", resp.Status)
 	}
 
-	// Handle error responses also
+	// TODO: Handle error responses also
 
 	// Read the response body
 	err = json.NewDecoder(resp.Body).Decode(target)
@@ -63,7 +63,7 @@ func (c *Client) NewRequest(method, name string, body interface{}) (*http.Reques
 
 	request := &http.Request{
 		Method: method,
-		URL:    c.BaseURL.JoinPath(endpoint.Prefix, endpoint.Route),
+		URL:    c.BaseURL.JoinPath(endpoint.URL()),
 	}
 
 	return request, nil
@@ -87,7 +87,7 @@ func (c *Client) NewRequestWithParameters(method, name string, params map[string
 // sanitizeURL redacts the client_secret parameter from the URL which may be exposed to the user.
 func sanitizeURL(uri *url.URL) *url.URL {
 	if uri == nil {
-		return nil
+		return &url.URL{}
 	}
 	params := uri.Query()
 	if len(params.Get("client_secret")) > 0 {
