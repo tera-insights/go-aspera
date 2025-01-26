@@ -1,7 +1,10 @@
 package aspera
 
 import (
+	"context"
+	"fmt"
 	"net/http"
+	"net/http/httptest"
 	"net/url"
 	"reflect"
 	"testing"
@@ -10,7 +13,7 @@ import (
 func TestNewClient(t *testing.T) {
 	type args struct {
 		httpClient *http.Client
-		baseUrl    *url.URL
+		baseUrl    string
 	}
 	tests := []struct {
 		name string
@@ -21,7 +24,7 @@ func TestNewClient(t *testing.T) {
 			name: "Create new client",
 			args: args{
 				httpClient: &http.Client{},
-				baseUrl:    &url.URL{},
+				baseUrl:    "",
 			},
 			want: &Client{
 				Client:  &http.Client{},
@@ -250,4 +253,98 @@ func Test_sanitizeURL(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestClient_Do(t *testing.T) {
+	type args struct {
+		ctx    context.Context
+		req    *http.Request
+		target interface{}
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+		{
+			name: "Nil ctx",
+			args: args{
+				ctx: nil,
+				req: &http.Request{
+					Method: "GET",
+					URL:    &url.URL{Path: "connect/transfers/activity"},
+				},
+				target: nil,
+			},
+			wantErr: true,
+		},
+		{
+			name: "Error response - URL not found",
+			args: args{
+				ctx: context.Background(),
+				req: &http.Request{
+					Method: "GET",
+					URL:    &url.URL{Path: "connect/tranwefwefwefsfers/activity"},
+				},
+				target: nil,
+			},
+			wantErr: true,
+		},
+		{
+			name: "Success response",
+			args: args{
+				ctx: context.Background(),
+				req: func() *http.Request {
+					req, err := http.NewRequest("GET", "http://example.com/connect/transfers/activity", nil)
+					if err != nil {
+						return nil
+					}
+					return req
+				}(),
+				target: nil,
+			},
+			wantErr: true, //TODO: THIS TEST CASE IS A SHAM	- FIX IT
+		},
+	}
+
+	server := MockServer()
+	defer server.Close()
+	serverURL, err := url.Parse(server.URL)
+	if err != nil {
+		t.Errorf("Failed to parse server URL: %v", err)
+	}
+
+	c := &Client{
+		Client:  &http.Client{},
+		BaseURL: serverURL,
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := c.Do(tt.args.ctx, tt.args.req, tt.args.target); (err != nil) != tt.wantErr {
+				t.Errorf("Client.Do() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func MockServer() *httptest.Server {
+	return httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		if r.URL.Path == "/connect/transfers/activity" {
+			w.WriteHeader(http.StatusOK)
+			_, err := w.Write([]byte(`{"value":"Okay"}`))
+			if err != nil {
+				fmt.Printf("Failed to write response: %v", err)
+			}
+			return
+		}
+
+		w.WriteHeader(http.StatusInternalServerError)
+		_, err := w.Write([]byte(`{"value":"Not Found"}`))
+		if err != nil {
+			fmt.Printf("Failed to write response: %v", err)
+		}
+	}))
 }

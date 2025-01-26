@@ -1,0 +1,13 @@
+2025/01/24 16:29:51 main.go:20: Starting Aspera CLI
+2025/01/24 16:29:51 main.go:36: Uploading file
+2025/01/24 16:42:07 main.go:21: Starting Aspera CLI
+2025/01/24 16:42:07 main.go:37: Authenticating user
+2025/01/24 16:42:07 main.go:41: Username and password are empty
+2025/01/24 16:42:27 main.go:21: Starting Aspera CLI
+2025/01/24 16:42:27 main.go:37: Authenticating user
+2025/01/24 16:52:08 main.go:23: Starting Aspera CLI
+2025/01/24 16:52:08 main.go:39: Authenticating user
+2025/01/24 16:52:08 main.go:54: unknown endpoint "/connect/info/authenticate"
+2025/01/24 16:53:19 main.go:23: Starting Aspera CLI
+2025/01/24 16:53:19 main.go:39: Authenticating user
+2025/01/24 16:53:19 main.go:54: Post "demo.asperasoft.com/connect/info/authenticate": unsupported protocol scheme ""

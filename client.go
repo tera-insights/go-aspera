@@ -14,10 +14,14 @@ type Client struct {
 	BaseURL *url.URL
 }
 
-func NewClient(httpClient *http.Client, baseUrl *url.URL) *Client {
+func NewClient(httpClient *http.Client, baseUrl string) *Client {
+	url, err := url.Parse(baseUrl)
+	if err != nil {
+		return nil
+	}
 	return &Client{
 		Client:  httpClient,
-		BaseURL: baseUrl,
+		BaseURL: url,
 	}
 }
 
@@ -44,7 +48,7 @@ func (c *Client) Do(ctx context.Context, req *http.Request, target interface{}) 
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		return fmt.Errorf("response failed: %s", resp.Status)
+		return fmt.Errorf("response failed with code: %s", resp.Status)
 	}
 
 	// TODO: Handle error responses also

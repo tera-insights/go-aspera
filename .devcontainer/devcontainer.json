@@ -9,6 +9,6 @@
         }
     },
     "mounts": [
-        "source=/Users/vishy/go/pkg,target=/go/pkg,type=bind,consistency=cached"
+        "source=/Users/vishishtkhilariwal/go/pkg,target=/go/pkg,type=bind,consistency=cached"
     ]
 }
